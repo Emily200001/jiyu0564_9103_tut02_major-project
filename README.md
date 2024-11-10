@@ -12,6 +12,7 @@ Image1
 ![An image of the example](readmeImages/Your_psychoacoustic_light_ensemble_2024.jpg) Image2
 
 These visual effects add a sense of rhythm to my work, allowing the audience to intuitively feel the ups and downs of the music. This synchronised graphical change enhances the expressive power of the work, especially in the interaction between the visuals and the audio.
+
 4. The p5.FFT is used to analyse the frequency and amplitude data of the audio in real time.
 Depending on the specific frequency band selected in the audio spectrum, the size and position of each graphical component is modified in real time, and some of the graphics also change colour.
 When the user clicks the play button, all the components are displayed simultaneously, and through audio-driven animation effects, each graphical element responds to the rhythm of the music in real time.
