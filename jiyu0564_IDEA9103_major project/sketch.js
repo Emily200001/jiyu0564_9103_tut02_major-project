@@ -41,7 +41,7 @@ function draw() {
 
   // Luna
   new RadiantCircle(width / 2 - 195, height / 2 + 195).display();
-  new RadiantCircleWithRays(width / 2 - 65, height / 2 + 65).display();
+  new RadiantCircleWithRays(width / 2 - 65, height / 2 + 65).display(scaleFactor);
   new RadiantRaysWithConcentricCircles(width / 2 - 195, height / 2 + 65, 2 * scaleFactor).display();
   new OuterDots(width / 2 - 195, height / 2 + 65, 65 * scaleFactor, 30).display();
   new RadiantRaysWithTargetCircles(width / 2 - 65, height / 2 + 195).display();
@@ -467,6 +467,7 @@ class RadiantCircle {
     ellipse(this.cx, this.cy, 3, 3);
   }
 }
+
 class RadiantCircleWithRays {
   constructor(cx, cy) {
     this.cx = cx;
@@ -475,29 +476,34 @@ class RadiantCircleWithRays {
     this.maxRadius = 65;
   }
 
-  display() {
+  display(scaleFactor) {
+    push();
+    translate(this.cx, this.cy);
+    scale(scaleFactor);
+
     fill(150, 170, 180, 200);
-    ellipse(this.cx-30, this.cy-30, 50, 50);
-    fill(173,135,134);
-    ellipse(this.cx+30, this.cy+10, 40, 40);
+    ellipse(-30, -30, 50, 50);
+    fill(173, 135, 134);
+    ellipse(30, 10, 40, 40);
     fill(213, 177, 146);
-    ellipse(this.cx-30, this.cy+30, 20, 20);
+    ellipse(-30, 30, 20, 20);
 
     for (let i = 0; i < this.numRays; i++) {
       let angle = map(i, 0, this.numRays, 0, TWO_PI);
-      let endX = this.cx + cos(angle) * this.maxRadius;
-      let endY = this.cy + sin(angle) * this.maxRadius;
-      
+      let endX = cos(angle) * this.maxRadius;
+      let endY = sin(angle) * this.maxRadius;
+
       strokeWeight(1);
       stroke(3);
-      line(this.cx, this.cy, endX, endY);
+      line(0, 0, endX, endY);
     }
-    
+
     fill(0);
     noStroke();
-    ellipse(this.cx, this.cy, 50, 50);
+    ellipse(0, 0, 50, 50);
     fill(128, 139, 140);
-    ellipse(this.cx, this.cy, 40, 40);
+    ellipse(0, 0, 40, 40);
+    pop();
   }
 }
 
