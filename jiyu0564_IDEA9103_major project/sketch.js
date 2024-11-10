@@ -1,4 +1,5 @@
 let song, fft;
+let showShapes = false; 
 
 function preload() {
   // Load the uploaded audio file
@@ -15,49 +16,51 @@ function setup() {
   song.connect(fft);
 
   // Create button to play/pause audio
-  let button = createButton('Play/Pause');
+  let button = createButton('Play/Reset');
   button.position((width - button.width) / 2, height - button.height - 10);
   button.mousePressed(togglePlay);
 }
 
 function draw() {
   background(128, 139, 140);
-  let spectrum = fft.analyze();
+  
+  if (showShapes) {
+    let spectrum = fft.analyze();
 
-  // Set properties and display shapes with dynamic changes
-  let scaleFactor = map(spectrum[10], 0, 255, 0.5, 2); // Based on frequency amplitude
+    // Set properties and display shapes with dynamic changes
+    let scaleFactor = map(spectrum[10], 0, 255, 0.5, 2); // Based on frequency amplitude
 
-  // Jiaqi
-  new CircularGradientWithRays(width / 2 - 195, height / 2 - 195, 65 * scaleFactor).display();
-  new DotAndLineSquare(width / 2 - 130, height / 2 - 260, 130 * scaleFactor, 130 * scaleFactor).display();
-  new GradientRingWithLinesAndHoles(width / 2 - 65, height / 2 - 65, 65 * scaleFactor, 20 * scaleFactor).display();
-  new ComplexCircleWithDotsAndShapes(width / 2 - 195, height / 2 - 65, 65 * scaleFactor).display();
+    // Jiaqi
+    new CircularGradientWithRays(width / 2 - 195, height / 2 - 195, 65 * scaleFactor).display();
+    new DotAndLineSquare(width / 2 - 130, height / 2 - 260, 130 * scaleFactor, 130 * scaleFactor).display();
+    new GradientRingWithLinesAndHoles(width / 2 - 65, height / 2 - 65, 65 * scaleFactor, 20 * scaleFactor).display();
+    new ComplexCircleWithDotsAndShapes(width / 2 - 195, height / 2 - 65, 65 * scaleFactor).display();
 
-  // Elia
-  new PatternedCircle(width / 2 + 195, height / 2 - 195, 65 * scaleFactor).display();
-  new ConcentricCircle(width / 2 + 195, height / 2 - 65, 65 * scaleFactor).display();
-  new BisectorCircle(width / 2 + 195, height / 2 + 65, 65 * scaleFactor).display();
-  new RoundpieCircle(width / 2 + 195, height / 2 + 195, 65 * scaleFactor).display();
+    // Elia
+    new PatternedCircle(width / 2 + 195, height / 2 - 195, 65 * scaleFactor).display();
+    new ConcentricCircle(width / 2 + 195, height / 2 - 65, 65 * scaleFactor).display();
+    new BisectorCircle(width / 2 + 195, height / 2 + 65, 65 * scaleFactor).display();
+    new RoundpieCircle(width / 2 + 195, height / 2 + 195, 65 * scaleFactor).display();
 
-  // Luna
-  new RadiantCircle(width / 2 - 195, height / 2 + 195).display();
-  new RadiantCircleWithRays(width / 2 - 65, height / 2 + 65).display(scaleFactor);
-  new RadiantRaysWithConcentricCircles(width / 2 - 195, height / 2 + 65, 2 * scaleFactor).display();
-  new OuterDots(width / 2 - 195, height / 2 + 65, 65 * scaleFactor, 30).display();
-  new RadiantRaysWithTargetCircles(width / 2 - 65, height / 2 + 195).display();
-  new CrossLines(width / 2 - 65, height / 2 + 195, 65 * scaleFactor).display();
-  new OuterDots2(width / 2 - 65, height / 2 + 195, 65 * scaleFactor, 12).display();
+    // Luna
+    new RadiantCircle(width / 2 - 195, height / 2 + 195).display();
+    new RadiantCircleWithRays(width / 2 - 65, height / 2 + 65).display(scaleFactor);
+    new RadiantRaysWithConcentricCircles(width / 2 - 195, height / 2 + 65, 2 * scaleFactor).display();
+    new OuterDots(width / 2 - 195, height / 2 + 65, 65 * scaleFactor, 30).display();
+    new RadiantRaysWithTargetCircles(width / 2 - 65, height / 2 + 195).display();
+    new CrossLines(width / 2 - 65, height / 2 + 195, 65 * scaleFactor).display();
+    new OuterDots2(width / 2 - 65, height / 2 + 195, 65 * scaleFactor, 12).display();
 
-  // Yixing
-  let pattern = new CirclePattern(width / 2 + 65, height / 2 - 195, 65 * scaleFactor, 30);
-  pattern.display();
-  let pattern2 = new CirclePattern(width / 2 + 65, height / 2 - 65, 65 * scaleFactor, 30);
-  pattern2.displaySecondCircle();
-  let pattern3 = new CirclePattern(width / 2 + 65, height / 2 + 65, 65 * scaleFactor, 30);
-  pattern3.displayThirdCircle();
-  let pattern4 = new CirclePattern(width / 2 + 65, height / 2 + 195, 65 * scaleFactor, 30);
-  pattern4.displayFourthCircle();
-
+    // Yixing
+    let pattern = new CirclePattern(width / 2 + 65, height / 2 - 195, 65 * scaleFactor, 30);
+    pattern.display();
+    let pattern2 = new CirclePattern(width / 2 + 65, height / 2 - 65, 65 * scaleFactor, 30);
+    pattern2.displaySecondCircle();
+    let pattern3 = new CirclePattern(width / 2 + 65, height / 2 + 65, 65 * scaleFactor, 30);
+    pattern3.displayThirdCircle();
+    let pattern4 = new CirclePattern(width / 2 + 65, height / 2 + 195, 65 * scaleFactor, 30);
+    pattern4.displayFourthCircle();
+  }
 }
 
 // Control audio playback and pause
@@ -65,9 +68,11 @@ function togglePlay() {
   if (song.isPlaying()) {
     song.stop();
     noLoop();
+    showShapes = false;
   } else {
     song.loop();
     loop();
+    showShapes = true;
   }
 }
 
