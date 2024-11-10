@@ -1,45 +1,74 @@
 let song, fft;
 
 function preload() {
-  // Upload audio file
+  // Load the uploaded audio file
   song = loadSound('assets/X-Ray Dog - Easy Money.mp3');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(128, 139, 140);
-  noLoop(); 
+  noLoop();
 
-  //Jiaqi
-  new CircularGradientWithRays(width/2-195, height/2-195, 65).display();
-  new DotAndLineSquare(width/2-130, height/2-260, 130, 130).display();
-  new GradientRingWithLinesAndHoles(width/2-65, height/2-65, 65, 20).display(); 
-  new ComplexCircleWithDotsAndShapes(width/2-195, height/2-65, 65).display();
+  // Initialize FFT object
+  fft = new p5.FFT(0.8, 64); // smoothing and number of frequency bins
+  song.connect(fft);
 
-  //Elia
-  new PatternedCircle(width/2+195, height/2-195, 65).display();
-  new ConcentricCircle(width/2+195, height/2-65, 65).display();
-  new BisectorCircle(width/2+195, height/2+65, 65).display();
-  new RoundpieCircle(width/2+195, height/2+195, 65).display();
-  
-  //Luna
-  new RadiantCircle(width/2-195, height/2+195).display();
-  new RadiantCircleWithRays(width/2-65, height/2+65).display(); 
-  new RadiantRaysWithConcentricCircles(width/2-195, height/2+65, 2).display();
-  new OuterDots(width/2-195, height/2+65, 65, 30).display();
-  new RadiantRaysWithTargetCircles(width/2-65, height/2+195).display();
-  new CrossLines(width/2-65, height/2+195, 65).display();
-  new OuterDots2(width/2-65, height/2+195, 65, 12).display();
-  
-  //Yixing
-  let pattern = new CirclePattern(width/2+65, height/2-195, 65, 30);
+  // Create button to play/pause audio
+  let button = createButton('Play/Pause');
+  button.position((width - button.width) / 2, height - button.height - 10);
+  button.mousePressed(togglePlay);
+}
+
+function draw() {
+  background(128, 139, 140);
+  let spectrum = fft.analyze();
+
+  // Set properties and display shapes with dynamic changes
+  let scaleFactor = map(spectrum[10], 0, 255, 0.5, 2); // Based on frequency amplitude
+
+  // Jiaqi
+  new CircularGradientWithRays(width / 2 - 195, height / 2 - 195, 65 * scaleFactor).display();
+  new DotAndLineSquare(width / 2 - 130, height / 2 - 260, 130 * scaleFactor, 130 * scaleFactor).display();
+  new GradientRingWithLinesAndHoles(width / 2 - 65, height / 2 - 65, 65 * scaleFactor, 20 * scaleFactor).display();
+  new ComplexCircleWithDotsAndShapes(width / 2 - 195, height / 2 - 65, 65 * scaleFactor).display();
+
+  // Elia
+  new PatternedCircle(width / 2 + 195, height / 2 - 195, 65 * scaleFactor).display();
+  new ConcentricCircle(width / 2 + 195, height / 2 - 65, 65 * scaleFactor).display();
+  new BisectorCircle(width / 2 + 195, height / 2 + 65, 65 * scaleFactor).display();
+  new RoundpieCircle(width / 2 + 195, height / 2 + 195, 65 * scaleFactor).display();
+
+  // Luna
+  new RadiantCircle(width / 2 - 195, height / 2 + 195).display();
+  new RadiantCircleWithRays(width / 2 - 65, height / 2 + 65).display();
+  new RadiantRaysWithConcentricCircles(width / 2 - 195, height / 2 + 65, 2 * scaleFactor).display();
+  new OuterDots(width / 2 - 195, height / 2 + 65, 65 * scaleFactor, 30).display();
+  new RadiantRaysWithTargetCircles(width / 2 - 65, height / 2 + 195).display();
+  new CrossLines(width / 2 - 65, height / 2 + 195, 65 * scaleFactor).display();
+  new OuterDots2(width / 2 - 65, height / 2 + 195, 65 * scaleFactor, 12).display();
+
+  // Yixing
+  let pattern = new CirclePattern(width / 2 + 65, height / 2 - 195, 65 * scaleFactor, 30);
   pattern.display();
-  let pattern2 = new CirclePattern(width/2+65, height/2-65, 65, 30);
+  let pattern2 = new CirclePattern(width / 2 + 65, height / 2 - 65, 65 * scaleFactor, 30);
   pattern2.displaySecondCircle();
-  let pattern3 = new CirclePattern(width/2+65, height/2+65, 65, 30);
+  let pattern3 = new CirclePattern(width / 2 + 65, height / 2 + 65, 65 * scaleFactor, 30);
   pattern3.displayThirdCircle();
-  let pattern4 = new CirclePattern(width/2+65, height/2+195, 65, 30);
+  let pattern4 = new CirclePattern(width / 2 + 65, height / 2 + 195, 65 * scaleFactor, 30);
   pattern4.displayFourthCircle();
+
+}
+
+// Control audio playback and pause
+function togglePlay() {
+  if (song.isPlaying()) {
+    song.stop();
+    noLoop();
+  } else {
+    song.loop();
+    loop();
+  }
 }
 
 class CircularGradientWithRays {
@@ -87,6 +116,7 @@ class CircularGradientWithRays {
     }
   }
 }
+
 class DotAndLineSquare {
   constructor(x,y,w,h){
     // Properties of a square
