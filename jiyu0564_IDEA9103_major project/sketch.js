@@ -42,10 +42,6 @@ function setup() {
   pattern4.displayFourthCircle();
 }
 
-function draw() {
-  translate(width / 2, height / 2);
-}
-
 class CircularGradientWithRays {
   constructor(cx, cy, r) {
     // Center coordinates and radius
