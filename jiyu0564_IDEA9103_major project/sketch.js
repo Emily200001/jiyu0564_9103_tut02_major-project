@@ -1,5 +1,5 @@
-let song, fft;
-let showShapes = false; 
+let song, fft; // Storing loaded audio file objects and frequency analysis objects
+let showShapes = false; // Controls whether graphics are displayed
 
 function preload() {
   // Load the uploaded audio file
@@ -7,23 +7,24 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(128, 139, 140);
-  noLoop();
+  createCanvas(windowWidth, windowHeight); // Create a canvas sized to the width and height of the window
+  background(128, 139, 140); // Setting the background color
+  noLoop(); // Disable auto-cycling of draw()
 
   // Initialize FFT object
   fft = new p5.FFT(0.8, 64); // smoothing and number of frequency bins
-  song.connect(fft);
+  song.connect(fft); // Get the frequency of the audio via fft
 
   // Create button to play/pause audio
-  let button = createButton('Play/Reset');
-  button.position((width - button.width) / 2, height - button.height - 10);
-  button.mousePressed(togglePlay);
+  let button = createButton('Play/Reset'); // Create a button
+  button.position((width - button.width) / 2, height - button.height - 10); // Setting the position of the button
+  button.mousePressed(togglePlay); // Control with the mouse
 }
 
 function draw() {
-  background(128, 139, 140);
+  background(128, 139, 140); // Reset background color
   
+  // When showShapes is true, the music starts and the picture changes according to the audio.
   if (showShapes) {
     let spectrum = fft.analyze();
 
@@ -63,16 +64,16 @@ function draw() {
   }
 }
 
-// Control audio playback and pause
+// Control audio play and reset
 function togglePlay() {
   if (song.isPlaying()) {
     song.stop();
     noLoop();
-    showShapes = false;
+    showShapes = false; // Graph not displayed when music stops
   } else {
     song.loop();
     loop();
-    showShapes = true;
+    showShapes = true; // Graphic display while music is playing
   }
 }
 
@@ -83,7 +84,7 @@ class CircularGradientWithRays {
     this.cy = cy;
     this.r = r;
     this.colors = [
-      // Gradient array
+      // Set the color array for the gradient
       color(231, 209, 170), color(195, 151, 125), color(173, 135, 134),
       color(135, 134, 138), color(101, 114, 127), color(117, 141, 160),
       color(142, 166, 171), color(165, 186, 187), color(224, 236, 217),
@@ -98,26 +99,26 @@ class CircularGradientWithRays {
     for (let i = 0; i < numSegments; i++) {
       let inter = map(i, 0, numSegments, 0, 1);
       let colorIndex = floor(inter * (this.colors.length - 1));
-      let c = lerpColor(
+      let c = lerpColor( // Calculate color gradient
         this.colors[colorIndex], 
         this.colors[colorIndex + 1], 
         (inter * (this.colors.length - 1)) % 1
       );
       fill(c);
-      noStroke();
-      arc(
+      noStroke(); // Setting fill color
+      arc( // Current segment of the arc
         this.cx, this.cy, this.r * 2, this.r * 2, 
         i * angleStep, (i + 1) * angleStep, PIE
       );
     }
 
-    stroke(0);
-    strokeWeight(1);
+    stroke(0); // Setting the color of the ray
+    strokeWeight(1); // Setting the thickness of the ray
     for (let i = 0; i < 60; i++) {
-      let angle = i * (TWO_PI / 60);
-      let xEnd = this.cx + cos(angle) * this.r;
+      let angle = i * (TWO_PI / 60); // Calculate the angle of the ray
+      let xEnd = this.cx + cos(angle) * this.r; // Coordinates of the end point of the ray
       let yEnd = this.cy + sin(angle) * this.r;
-      line(this.cx, this.cy, xEnd, yEnd);
+      line(this.cx, this.cy, xEnd, yEnd); // Rays from the center to the edge
     }
   }
 }
@@ -138,7 +139,7 @@ class DotAndLineSquare {
   display(){
     // Draw the top half of the small dot array
   for (let j = 0; j < this.h / 2; j += this.dotSpacing) {
-    // 交错排列效果
+    // Interlocking effect
     let offset = (j / this.dotSpacing) % 2 === 0 ? 0 : this.dotSpacing / 2;
     for (let i = 0; i < this.w / 2; i += this.dotSpacing) {
       fill(0);
@@ -164,6 +165,7 @@ class DotAndLineSquare {
   line(this.x + this.w / 2, this.y + (3 * this.h) / 4, this.x + this.w, this.y + (3 * this.h) / 4);
 }
 }
+
 class GradientRingWithLinesAndHoles {
   constructor(cx, cy, outerR, thickness) {
     // Properties of the ring
@@ -171,7 +173,7 @@ class GradientRingWithLinesAndHoles {
     this.cy = cy;
     this.outerR = outerR;
     this.thickness = thickness;
-    this.colors = [
+    this.colors = [ // Setting the color array for the gradient effect
       color(240, 240, 240), color(180, 180, 180), color(100, 100, 100),
       color(60, 60, 60), color(173,135,134), color(135,134,138),
       color(101,114,127), color(117,141,160), color(142,166,171),
@@ -404,8 +406,8 @@ class ConcentricCircle {
   constructor(centerX, centerY, maxRadius) {
     this.centerX = centerX;
     this.centerY = centerY;
-    this.maxRadius = maxRadius;
-    this.colors = [
+    this.maxRadius = maxRadius; // maximum radius
+    this.colors = [ // Setting the color array for filling
       color(231, 209, 170),
       color(195, 151, 125),
       color(173, 135, 134),
@@ -423,9 +425,9 @@ class ConcentricCircle {
     // Draw gradual concentric circles from outside to inside
     for (let r = this.maxRadius; r > 0; r -= 15) {
       let colorIndex = floor(map(r, 0, this.maxRadius, 0, this.colors.length - 1));
-      fill(this.colors[colorIndex]);
+      fill(this.colors[colorIndex]); // Setting the color for filling
       noStroke();
-      ellipse(this.centerX, this.centerY, r * 2);
+      ellipse(this.centerX, this.centerY, r * 2); // Draw a circle of the current layer
     }
     // Add radial lines for visual effect
     stroke(0);
@@ -433,7 +435,7 @@ class ConcentricCircle {
     for (let angle = 0; angle < TWO_PI; angle += PI / 12) {
       let x2 = this.centerX + cos(angle) * this.maxRadius;
       let y2 = this.centerY + sin(angle) * this.maxRadius;
-      line(this.centerX, this.centerY, x2, y2);
+      line(this.centerX, this.centerY, x2, y2); // Draw radiating lines from the centre of a circle
     }
     // Draw the center point
     fill(0);
@@ -443,7 +445,7 @@ class ConcentricCircle {
 }
 
 class RadiantCircle {
-  constructor(cx, cy) {
+  constructor(cx, cy) { // Setting the value of the circle
     this.cx = cx;
     this.cy = cy;
     this.numRays = 30;
@@ -466,7 +468,7 @@ class RadiantCircle {
         ellipse(x, y, dotSize, dotSize);
       }
     }
-    
+    // Draw a small black dot in the center
     fill(0);
     noStroke();
     ellipse(this.cx, this.cy, 3, 3);
@@ -483,9 +485,10 @@ class RadiantCircleWithRays {
 
   display(scaleFactor) {
     push();
-    translate(this.cx, this.cy);
-    scale(scaleFactor);
+    translate(this.cx, this.cy); // Shift the origin of the drawing to the graphic centreShift the origin of the drawing to the graphic centre
+    scale(scaleFactor); // Call the scaleFactor
 
+    // Draw three transparent inner circles
     fill(150, 170, 180, 200);
     ellipse(-30, -30, 50, 50);
     fill(173, 135, 134);
@@ -493,16 +496,17 @@ class RadiantCircleWithRays {
     fill(213, 177, 146);
     ellipse(-30, 30, 20, 20);
 
+    // Draw radiating rays
     for (let i = 0; i < this.numRays; i++) {
-      let angle = map(i, 0, this.numRays, 0, TWO_PI);
+      let angle = map(i, 0, this.numRays, 0, TWO_PI); // Setting the angle of the ray
       let endX = cos(angle) * this.maxRadius;
       let endY = sin(angle) * this.maxRadius;
 
       strokeWeight(1);
       stroke(3);
-      line(0, 0, endX, endY);
+      line(0, 0, endX, endY); // Draws rays from the center
     }
-
+    // Draw concentric circles in the center
     fill(0);
     noStroke();
     ellipse(0, 0, 50, 50);
@@ -513,7 +517,7 @@ class RadiantCircleWithRays {
 }
 
 class RadiantRaysWithConcentricCircles {
-  constructor(cx, cy, radiusCount) {
+  constructor(cx, cy, radiusCount) { // Setting the value of the circle
     this.cx = cx;
     this.cy = cy;
     this.radiusCount = radiusCount;
@@ -529,8 +533,8 @@ class RadiantRaysWithConcentricCircles {
     // Create a gradient ring effect
     let numSegments = 360;
     for (let i = 0; i < numSegments; i++) {
-      let angleStart = map(i, 0, numSegments, 0, TWO_PI);
-      let angleEnd = map(i + 1, 0, numSegments, 0, TWO_PI);
+      let angleStart = map(i, 0, numSegments, 0, TWO_PI); // Setting starting angle
+      let angleEnd = map(i + 1, 0, numSegments, 0, TWO_PI); // Setting ending angle
       let gradientColor = this.getGradientColor(i, numSegments);
       fill(gradientColor);
       noStroke();
@@ -543,26 +547,26 @@ class RadiantRaysWithConcentricCircles {
       let endY = this.cy + sin(angle) * this.maxRadius;
       stroke(0);
       strokeWeight(1);
-      line(this.cx, this.cy, endX, endY);
+      line(this.cx, this.cy, endX, endY); // Draw rays
     }
 
     fill(0);
     noStroke();
-    ellipse(this.cx, this.cy, 6, 6);
+    ellipse(this.cx, this.cy, 6, 6); // Add a small black dot in the center
   }
   // Auxiliary method for obtaining gradient color
   getGradientColor(index, totalSegments) {
-    let colors = [
+    let colors = [ // Setting the color array for the gradient
       color(231,209,170), color(195,151,125), color(173,135,134),
       color(135,134,138), color(181,114,127), color(117,141,160),
       color(142,166,171), color(165,186,187), color(224,236,217),
       color(230,229,204)
     ];
     
-    let segment = index / (totalSegments / (colors.length - 1));
+    let segment = index / (totalSegments / (colors.length - 1)); // Calculate the gradient of the current paragraph
     let colorIndex = floor(segment);
     let t = segment - colorIndex;
-    return lerpColor(colors[colorIndex], colors[colorIndex + 1], t);
+    return lerpColor(colors[colorIndex], colors[colorIndex + 1], t); // Generate a gradient
   }
 }
 
@@ -609,7 +613,8 @@ class RadiantRaysWithTargetCircles {
       noStroke();
       arc(this.cx, this.cy, this.radiusStep * 5, this.radiusStep * 5, angleStart, angleEnd, PIE);
     }
-       noFill();
+    // Draw concentric circles
+    noFill();
     stroke(0);
     strokeWeight(0.3);
     for (let i = 40; i <= 120; i += 20) {
@@ -650,8 +655,8 @@ class OuterDots2 {
 
       fill(0);
       noStroke();
-      ellipse(dotX, dotY, 8, 8);
-      ellipse(dotX2, dotY2, 5, 5);
+      ellipse(dotX, dotY, 8, 8); // Draw outer circle points
+      ellipse(dotX2, dotY2, 5, 5); // Draw an inner circle points
     }
   }
 }
@@ -666,6 +671,7 @@ class CrossLines {
   display() {
     stroke(0);
     strokeWeight(0.5);
+    // Draw a crosshair
     line(this.cx - this.lineLength, this.cy, this.cx + this.lineLength, this.cy);
     line(this.cx, this.cy - this.lineLength, this.cx, this.cy + this.lineLength);
   }
@@ -828,3 +834,11 @@ class CirclePattern {
     }
   }
 }
+
+// Comment
+// acr()
+// https://p5js.org/reference/p5/arc/
+// vertex()
+// https://p5js.org/reference/p5/vertex/
+// ellipse()
+// https://p5js.org/reference/p5/ellipse/
