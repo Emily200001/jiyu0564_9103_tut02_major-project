@@ -1,3 +1,10 @@
+let song, fft;
+
+function preload() {
+  // Upload audio file
+  song = loadSound('assets/X-Ray Dog - Easy Money.mp3');
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(128, 139, 140);
